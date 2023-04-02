@@ -23,6 +23,15 @@ export default {
   Mutation: {
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
+      if (!valid) {
+        throw new GraphQLError("Errors", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            errors,
+          },
+        });
+      }
+
       const user = await User.findOne({ username });
 
       if (!user) {
@@ -69,8 +78,7 @@ export default {
           },
         });
       }
-      const user = User.findOne({ username });
-      console.log(user);
+      const user = await User.findOne({ username });
       if (user) {
         throw new GraphQLError("Username already registered", {
           extensions: {

@@ -24,30 +24,45 @@ A social media web application built with the MERN (MongoDB, Express, React, Nod
 
 1. Clone the repository:
 
-   ```sh
+   ```
    git clone https://github.com/username/social-media-merng.git
+   ```
 
 2. Install dependencies for the server: 
-    cd social-media-merng/server
-    npm install
+ ```
+ cd social-media-merng/server
+ npm install
+ ```
 
 3. Install dependencies for the client:
-    cd ../client
-    npm install
+ ```
+ cd ../client
+ npm install
+ ```
 
 4. Create a .env file in the server directory and add the following:
-    MONGODB=<your MongoDB connection string>
-    SECRET_KEY=<your secret key>
+ ```
+ MONGODB=<your MongoDB connection string>
+ SECRET_KEY=<your secret key>
+ ```
 
 5. Start the server:
-    cd ../server
-    npm start
+ ```
+ cd ../server
+ npm start
+ ```
 
 6.  Start the client:
-    cd ../client
-    npm start
+ ```
+ cd ../client
+ npm start
+ ```
 
-7. Open the application in your browser at [http://localhost:3000].
+7. Open the application in your browser at 
+```
+[http://localhost:3000].([http://localhost:3000].)
+```
+
 
 ## Usage
 - Sign up or log in to access the application.

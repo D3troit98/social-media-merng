@@ -21,10 +21,17 @@ const server = new ApolloServer({
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   status400ForVariableCoercionErrors: true,
+
 });
 await server.start();
 
-app.use(cors(), bodyParser.json(), expressMiddleware(server));
+app.use(
+  cors(),
+  bodyParser.json(),
+  expressMiddleware(server, {
+    context: ({ req }) => ({ req }),
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 

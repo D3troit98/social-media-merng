@@ -29,7 +29,7 @@ export const validateRegisterInput = (
 
 export const validateLoginInput = (username, password) => {
   const errors = {};
-  if (username.trim === "") {
+  if (username.trim() === "") {
     errors.username = "Username must not be empty";
   }
 
