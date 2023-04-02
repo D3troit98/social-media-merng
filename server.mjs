@@ -20,6 +20,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  status400ForVariableCoercionErrors: true,
 });
 await server.start();
 
