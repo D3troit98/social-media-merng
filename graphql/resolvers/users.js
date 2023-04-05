@@ -80,9 +80,11 @@ export default {
       }
       const user = await User.findOne({ username });
       if (user) {
+        errors.general = "Username already registered";
         throw new GraphQLError("Username already registered", {
           extensions: {
             code: "BAD_USER_INPUT",
+            errors,
           },
         });
       }

@@ -1,6 +1,10 @@
 import Post from "../../models/Post.js";
 import { checkauth } from "../../utils/check_auth.js";
 import { GraphQLError } from "graphql";
+import { PubSub } from "graphql-subscriptions";
+
+const pubsub = new PubSub();
+
 export default {
   Query: {
     async getPosts() {
@@ -28,7 +32,13 @@ export default {
   Mutation: {
     async createPost(_, { body }, contextValue) {
       const user = checkauth(contextValue);
-
+      if (args.body.trim() === "") {
+        throw new GraphQLError("Post body must not be empty", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
+      }
       const newPost = new Post({
         body,
         user: user.id,
@@ -37,6 +47,11 @@ export default {
       });
 
       const post = await newPost.save();
+
+      pubsub.publish("NEW_POST", {
+        newPost,
+      });
+
       return post;
     },
     async deletePost(_, { postId }, contextValue) {
@@ -57,6 +72,11 @@ export default {
       } catch (e) {
         throw new Error(e);
       }
+    },
+  },
+  Subscription: {
+    newPost: {
+      subscribe: () => pubsub.asyncIterator(["NEW_POST"]),
     },
   },
 };

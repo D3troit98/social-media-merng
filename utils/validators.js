@@ -5,10 +5,10 @@ export const validateRegisterInput = (
   confirmPassword
 ) => {
   const errors = {};
-  if (username.trim === "") {
+  if (username.trim() === "") {
     errors.username = "Username must not be empty";
   }
-  if (email.trim === "") {
+  if (email.trim() === "") {
     errors.email = "Email must not be empty";
   } else {
     const regEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

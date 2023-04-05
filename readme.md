@@ -19,7 +19,8 @@ A social media web application built with the MERN (MongoDB, Express, React, Nod
 - Node.js: A JavaScript runtime used to run the server-side code.
 - GraphQL: A query language and runtime used to interact with the API.
 - Semantic UI: A CSS framework used for styling.
-
+- Next.js
+- Apollo Server
 ## Installation
 
 1. Clone the repository:
