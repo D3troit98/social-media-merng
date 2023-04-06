@@ -1,11 +1,13 @@
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Form, Checkbox, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { REGISTER_USER } from "@/utils/queries";
 import { useForm } from "@/utils/hooks";
+import { useStateContext } from "@/context/auth";
 const Register = () => {
   const [errors, setErrors] = useState({});
+  const { user, login } = useStateContext();
   const router = useRouter();
   const { handleSubmit, onChange, values } = useForm(registerUser, {
     username: "",
@@ -16,8 +18,10 @@ const Register = () => {
 
   const [addUser, { data, loading, error }] = useMutation(REGISTER_USER, {
     update(proxy, result) {
-      setErrors(result.errors[0].extensions.errors);
-      if (result.data) {
+      if (result.errors) setErrors(result.errors[0].extensions.errors);
+
+      if (result.data.register) {
+        login(result.data.register);
         router.push("/");
       }
     },
@@ -28,7 +32,11 @@ const Register = () => {
   function registerUser() {
     addUser();
   }
-
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
   return (
     <div className="form-container">
       <Form
@@ -37,6 +45,7 @@ const Register = () => {
         style={{ marginTop: "15px" }}
         className={loading ? "loading" : ""}
       >
+        <h1>Register</h1>
         <Form.Field>
           <label>Email</label>
           <Form.Input

@@ -66,7 +66,7 @@ const PORT = process.env.PORT || 5000;
 // Now that our HTTP server is fully set up, we can listen to it.
 
 mongoose
-  .connect(process.env.CONNECTION_URL, {
+  .connect(process.env.CONNECTION_URL2, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

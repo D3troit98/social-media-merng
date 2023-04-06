@@ -48,7 +48,19 @@ export default function Home() {
           <Grid.Row>
             <Card.Group itemsPerRow={3} stackable>
               {loading || !posts ? (
-                <SpinningLoader />
+                <div>
+                  <div className="ui segment">
+                    <div className="ui active transition visible inverted dimmer">
+                      <div className="content">
+                        <div className="ui inverted text loader">Loading</div>
+                      </div>
+                    </div>
+                    <img
+                      src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png"
+                      className="ui image"
+                    />
+                  </div>
+                </div>
               ) : (
                 posts.map((post) => <PostCard key={post.id} post={post} />)
               )}

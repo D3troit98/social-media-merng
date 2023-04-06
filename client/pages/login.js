@@ -1,23 +1,26 @@
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import { REGISTER_USER } from "@/utils/queries";
+import { LOGIN_USER } from "@/utils/queries";
 import { useForm } from "@/utils/hooks";
+import { useStateContext } from "@/context/auth";
 const Login = () => {
+  const { user, login } = useStateContext();
   const [errors, setErrors] = useState({});
   const router = useRouter();
-  const { handleSubmit, onChange, values } = useForm(registerUser, {
+  const { handleSubmit, onChange, values } = useForm(loginUserCallback, {
     username: "",
-    email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const [loginUser, { data, loading, error }] = useMutation(REGISTER_USER, {
+  const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER, {
     update(proxy, result) {
-      setErrors(result.errors[0].extensions.errors);
-      if (result.data) {
+      console.log(result);
+      if (result.errors) setErrors(result.errors[0].extensions.errors);
+
+      if (result.data.login) {
+        login(result.data.login);
         router.push("/");
       }
     },
@@ -25,9 +28,15 @@ const Login = () => {
     errorPolicy: "all",
   });
 
-  function registerUser() {
-    addUser();
+  function loginUserCallback() {
+    loginUser();
   }
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
 
   return (
     <div className="form-container">
@@ -37,17 +46,8 @@ const Login = () => {
         style={{ marginTop: "15px" }}
         className={loading ? "loading" : ""}
       >
-        <Form.Field>
-          <label>Email</label>
-          <Form.Input
-            name="email"
-            type="email"
-            value={values.email}
-            onChange={onChange}
-            placeholder="Email"
-            error={errors.email ? true : false}
-          />
-        </Form.Field>
+        <h1>Login</h1>
+
         <Form.Field>
           <label>Username</label>
           <Form.Input
@@ -70,20 +70,9 @@ const Login = () => {
             error={errors.password ? true : false}
           />
         </Form.Field>
-        <Form.Field>
-          <label>Confirm Password</label>
-          <Form.Input
-            name="confirmPassword"
-            type="password"
-            value={values.confirmPassword}
-            onChange={onChange}
-            placeholder="Confirm Password..."
-            error={errors.confirmPsssword ? true : false}
-          />
-        </Form.Field>
 
         <Button type="submit" color="teal">
-          Register
+          Login
         </Button>
       </Form>
       {Object?.keys(errors).length > 0 && (
