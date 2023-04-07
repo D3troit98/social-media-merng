@@ -1,33 +1,13 @@
 import Head from "next/head";
-import Image from "next/image";
-import Router from "next/router";
 import PostCard from "@/components/PostCard";
-import { useQuery, gql } from "@apollo/client";
-import { Card, Grid, Loader } from "semantic-ui-react";
-import SpinningLoader from "@/components/SpinningLoader";
-const FETCH_POSTS_QUERY = gql`
-  {
-    getPosts {
-      id
-      body
-      createdAt
-      username
-      likeCount
-      likes {
-        username
-      }
-      commentCount
-      comments {
-        id
-        username
-        createdAt
-        body
-      }
-    }
-  }
-`;
+import { useQuery } from "@apollo/client";
+import { Card, Grid, Transition } from "semantic-ui-react";
+import PostForm from "@/components/PostForm";
+import { useStateContext } from "@/context/auth";
+import { FETCH_POSTS_QUERY } from "@/utils/queries";
 
 export default function Home() {
+  const { user } = useStateContext();
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
   const posts = data?.getPosts;
 
@@ -47,6 +27,11 @@ export default function Home() {
 
           <Grid.Row>
             <Card.Group itemsPerRow={3} stackable>
+              {user && (
+                <Grid.Column>
+                  <PostForm />
+                </Grid.Column>
+              )}
               {loading || !posts ? (
                 <div>
                   <div className="ui segment">
@@ -62,7 +47,11 @@ export default function Home() {
                   </div>
                 </div>
               ) : (
-                posts.map((post) => <PostCard key={post.id} post={post} />)
+                <Transition.Group>
+                  {posts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                </Transition.Group>
               )}
             </Card.Group>
           </Grid.Row>

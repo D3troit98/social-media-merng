@@ -32,7 +32,7 @@ export default {
   Mutation: {
     async createPost(_, { body }, contextValue) {
       const user = checkauth(contextValue);
-      if (args.body.trim() === "") {
+      if (body.trim() === "") {
         throw new GraphQLError("Post body must not be empty", {
           extensions: {
             code: "BAD_USER_INPUT",
